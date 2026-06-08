@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YX Media Network</title>
+    <!-- Modern Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #1a1c20;
+            --surface-color: #24282d;
+            --surface-color-light: #2c3138;
+            --text-main: #f0f2f5;
+            --text-muted: #a0aab2;
+            --accent-silver: #d1d5db;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(36, 40, 45, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --transition-smooth: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1, h2, h3 {
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        a {
+            color: var(--text-main);
+            text-decoration: none;
+            transition: color var(--transition-smooth);
+        }
+
+        a:hover {
+            color: var(--accent-silver);
+        }
+
+        /* --- Header --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(26, 28, 32, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 0;
+            transition: all var(--transition-smooth);
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            height: 40px;
+            object-fit: contain;
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            font-weight: 600;
+            font-size: 0.95rem;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--text-main);
+            transition: width var(--transition-smooth);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .btn {
+            background-color: var(--text-main);
+            color: var(--bg-color);
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255,255,255,0.2);
+            color: var(--bg-color);
+        }
+
+        /* --- Hero Slider --- */
+        .hero-slider {
+            position: relative;
+            height: 100vh;
+            min-height: 600px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slides {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            display: flex;
+            align-items: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+            z-index: 1;
+        }
+
+        .slide img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            filter: brightness(0.4);
+        }
+
+        .slide-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 0 20px;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.8s ease-out 0.3s;
+        }
+
+        .slide.active .slide-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .slide-content h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #fff, #9aa4b5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slide-content p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            font-size: 1.5rem;
+            backdrop-filter: blur(5px);
+            transition: background var(--transition-smooth);
+        }
+
+        .slider-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .slider-btn.prev { left: 30px; }
+        .slider-btn.next { right: 30px; }
+
+        /* --- About Us --- */
+        .about-section {
+            padding: 120px 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 24px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .about-content h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            height: 3px;
+            width: 60px;
+            background: var(--accent-silver);
+        }
+
+        .about-content p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .about-image-wrapper {
+            position: relative;
+            height: 400px;
+            border-radius: 20px;
+            background: linear-gradient(45deg, var(--surface-color), var(--surface-color-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        
+        .about-image-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%);
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            transform: translateY(0);
+            transition: transform var(--transition-smooth);
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .glass-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .glass-card p {
+            color: var(--text-muted);
+        }
+
+        /* --- Brands Slider --- */
+        .brands-section {
+            padding: 80px 0;
+            background-color: var(--surface-color);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .brands-section h2 {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .marquee {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .marquee::before, .marquee::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 150px;
+            height: 100%;
+            z-index: 2;
+        }
+
+        .marquee::before {
+            left: 0;
+            background: linear-gradient(to right, var(--surface-color), transparent);
+        }
+
+        .marquee::after {
+            right: 0;
+            background: linear-gradient(to left, var(--surface-color), transparent);
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: scroll 30s linear infinite;
+        }
+
+        .marquee-content span {
+            display: inline-block;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--surface-color-light);
+            margin: 0 40px;
+            transition: color var(--transition-smooth);
+        }
+
+        .marquee-content span:hover {
+            color: var(--accent-silver);
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* --- Testimonials --- */
+        .testimonials-section {
+            padding: 120px 20px;
+            text-align: center;
+        }
+
+        .testimonials-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px 30px;
+            text-align: left;
+            transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .quote {
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--text-main);
+            margin-bottom: 20px;
+        }
+
+        .author {
+            font-weight: 600;
+            color: var(--accent-silver);
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: #111316;
+            padding: 60px 0 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            height: 50px;
+            object-fit: contain;
+            opacity: 0.8;
+            transition: opacity var(--transition-smooth);
+        }
+        
+        .footer-logo:hover {
+            opacity: 1;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-main);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .about-section {
+                grid-template-columns: 1fr;
+            }
+            nav {
+                display: none; /* simple mobile adjustment */
+            }
+            .slide-content h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="main-header">
+        <div class="container">
+            <a href="#"><img src="logo_nbg.png" alt="YX Media Network" class="logo"></a>
+            <nav>
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#work">Work</a>
+                <a href="#brands">Brands</a>
+                <a href="#testimonials">Testimonials</a>
+                <a href="#careers">Careers</a>
+            </nav>
+            <a href="#contact" class="btn">Contact Us</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Section 1: Hero Slider -->
+        <section id="home" class="hero-slider">
+            <div class="slides">
+                <div class="slide active">
+                    <img src="images/pexels-efrem-efre-2786187-37170373.jpg" alt="Media Studio">
+                    <div class="slide-content">
+                        <h1>Elevate Your Media</h1>
+                        <p>State-of-the-art production, cinematic quality, and global broadcasting.</p>
+                        <a href="#about" class="btn">Discover More</a>
+                    </div>
+                </div>
+                <div class="slide">
+                    <img src="images/pexels-jimmy-liao-3615017-9740059.jpg" alt="Digital Control Room">
+                    <div class="slide-content">
+                        <h1>Futuristic Broadcasting</h1>
+                        <p>Connecting the world with high-tech digital media solutions.</p>
+                        <a href="#contact" class="btn">Partner With Us</a>
+                    </div>
+                </div>
+            </div>
+            <button class="slider-btn prev" aria-label="Previous Slide">&#10094;</button>
+            <button class="slider-btn next" aria-label="Next Slide">&#10095;</button>
+        </section>
+
+        <!-- Section 2: About Us -->
+        <section id="about" class="about-section container">
+            <div class="about-content">
+                <h2>About Us</h2>
+                <p>YX Media Network is a premier media agency dedicated to pioneering the digital landscape. With top-tier production facilities and a focus on innovation, we bridge the gap between creative vision and global audiences.</p>
+                <p>Our expert team leverages cutting-edge technology to craft compelling narratives and powerful digital experiences that leave a lasting impact in the ever-evolving media ecosystem.</p>
+            </div>
+            <div class="about-image-wrapper" style="background: url('images/about_us.jpg') center/cover no-repeat;">
+                <style>.about-image-wrapper::before { display: none; }</style>
+            </div>
+        </section>
+
+        <!-- Section 3: Brand Logos Slider -->
+        <section id="brands" class="brands-section">
+            <div class="container">
+                <h2>Trusted by Industry Leaders</h2>
+                <div class="marquee">
+                    <div class="marquee-content">
+                        <span>AURA</span>
+                        <span>NEXUS</span>
+                        <span>VANGUARD</span>
+                        <span>ORBIT</span>
+                        <span>ZEPHYR</span>
+                        <span>AURA</span>
+                        <span>NEXUS</span>
+                        <span>VANGUARD</span>
+                        <span>ORBIT</span>
+                        <span>ZEPHYR</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Testimonials -->
+        <section id="testimonials" class="testimonials-section container">
+            <h2>What Our Clients Say</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="quote">"An absolute game-changer for our digital presence. YX Media delivered beyond our wildest expectations."</div>
+                    <div class="author">- Jane Doe, CEO of Nexus</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="quote">"Their production quality and innovative approach set them apart from any other agency in the space."</div>
+                    <div class="author">- John Smith, Marketing Director</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="quote">"We saw a 200% increase in engagement after partnering with YX Media Network. Highly recommended."</div>
+                    <div class="author">- Sarah Lee, Vanguard Tech</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <a href="#"><img src="logo_nbg.png" alt="YX Media Network" class="footer-logo"></a>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Support</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 YX Media Network. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Header scroll effect
+        const header = document.getElementById('main-header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.style.padding = '10px 0';
+                header.style.background = 'rgba(26, 28, 32, 0.95)';
+            } else {
+                header.style.padding = '15px 0';
+                header.style.background = 'rgba(26, 28, 32, 0.85)';
+            }
+        });
+
+        // Simple slider logic
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+        let slideInterval;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        document.querySelector('.next').addEventListener('click', () => {
+            nextSlide();
+            resetInterval();
+        });
+
+        document.querySelector('.prev').addEventListener('click', () => {
+            prevSlide();
+            resetInterval();
+        });
+
+        function resetInterval() {
+            clearInterval(slideInterval);
+            slideInterval = setInterval(nextSlide, 6000);
+        }
+
+        // Auto slide
+        slideInterval = setInterval(nextSlide, 6000);
+    </script>
+</body>
+</html>
